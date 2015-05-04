@@ -55,23 +55,23 @@ public class SignGuestbookServlet extends HttpServlet {
              DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
              datastore.put(greeting);
              
-        //Add the entry to GCS also
-        String strFileName = System.currentTimeMillis() + ".txt";
-        GcsOutputChannel outputChannel =
-        gcsService.createOrReplace(new GcsFilename(BUCKET_NAME,strFileName), 
-            new GcsFileOptions.Builder().mimeType("text/plain").build());
-        OutputStream os = Channels.newOutputStream(outputChannel);
-        try {
-	        os.write(entry.getBytes(), 0, entry.length());
-	        }
-	        finally {
-	           os.close();
-	        }
+             //Add the entry to GCS also
+             String strFileName = System.currentTimeMillis() + ".txt";
+             GcsOutputChannel outputChannel =
+                 gcsService.createOrReplace(new GcsFilename(BUCKET_NAME,strFileName), 
+                 new GcsFileOptions.Builder().mimeType("text/plain").build());
+             OutputStream os = Channels.newOutputStream(outputChannel);
+             try {
+	             os.write(entry.getBytes(), 0, entry.length());
+	         }
+	         finally {
+	            os.close();
+	         }
              
          }
          catch (Exception e) { 
             System.out.println(e.getMessage());
          }
       resp.sendRedirect("index.jsp");
-}
+    }
 }
