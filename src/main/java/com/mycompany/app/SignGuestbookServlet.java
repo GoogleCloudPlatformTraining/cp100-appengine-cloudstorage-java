@@ -7,6 +7,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
+
 import com.google.appengine.tools.cloudstorage.GcsFileOptions;
 import com.google.appengine.tools.cloudstorage.GcsFilename;
 import com.google.appengine.tools.cloudstorage.GcsInputChannel;
@@ -18,8 +24,7 @@ import com.google.appengine.tools.cloudstorage.RetryParams;
 import java.io.OutputStream;
 import java.nio.channels.Channels;
 
-import com.google.appengine.api.memcache.*;
-
+import java.util.Date;
 import java.util.List;
 
 public class SignGuestbookServlet extends HttpServlet {
@@ -36,20 +41,23 @@ public class SignGuestbookServlet extends HttpServlet {
   public void doPost(HttpServletRequest req, HttpServletResponse resp)
       throws IOException {
 
-  String entry = req.getParameter("entry");   
+  String entry = req.getParameter("entry");
+  System.out.println(entry);
   
       try {
-             MemcacheService _service = MemcacheServiceFactory.getMemcacheService();
-             List entries = (List)_service.get("entries");
-             if (entries == null) {
-	             entries = new java.util.ArrayList<String>();
-			 }
-	         entries.add(entry);
-             _service.put("entries",entries);
+             String guestbookName = "default";
+             Key guestbookKey = KeyFactory.createKey("Guestbook", guestbookName);
+             Date date = new Date();
+             Entity greeting = new Entity("Greeting", guestbookKey);
+             greeting.setProperty("date", date);
+             greeting.setProperty("content", entry);
              
-             //Add the entry to GCS also
-             String strFileName = System.currentTimeMillis() + ".txt";
-             GcsOutputChannel outputChannel =
+             DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+             datastore.put(greeting);
+             
+        //Add the entry to GCS also
+        String strFileName = System.currentTimeMillis() + ".txt";
+        GcsOutputChannel outputChannel =
         gcsService.createOrReplace(new GcsFilename(BUCKET_NAME,strFileName), GcsFileOptions.getDefaultInstance());
         OutputStream os = Channels.newOutputStream(outputChannel);
         try {
