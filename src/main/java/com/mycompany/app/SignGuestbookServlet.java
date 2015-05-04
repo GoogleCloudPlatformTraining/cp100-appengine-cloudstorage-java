@@ -58,7 +58,8 @@ public class SignGuestbookServlet extends HttpServlet {
         //Add the entry to GCS also
         String strFileName = System.currentTimeMillis() + ".txt";
         GcsOutputChannel outputChannel =
-        gcsService.createOrReplace(new GcsFilename(BUCKET_NAME,strFileName), GcsFileOptions.getDefaultInstance());
+        gcsService.createOrReplace(new GcsFilename(BUCKET_NAME,strFileName), 
+            new GcsFileOptions.Builder().mimeType("text/plain").build());
         OutputStream os = Channels.newOutputStream(outputChannel);
         try {
 	        os.write(entry.getBytes(), 0, entry.length());
