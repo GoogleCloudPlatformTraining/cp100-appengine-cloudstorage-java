@@ -42,8 +42,7 @@ public class SignGuestbookServlet extends HttpServlet {
       throws IOException {
 
   String entry = req.getParameter("entry");
-  System.out.println(entry);
-  
+
       try {
              String guestbookName = "default";
              Key guestbookKey = KeyFactory.createKey("Guestbook", guestbookName);
