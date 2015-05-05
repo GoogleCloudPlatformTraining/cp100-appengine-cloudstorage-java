@@ -17,7 +17,6 @@
 package com.mycompany.app;
 
 import java.io.IOException;
-import java.util.Properties;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -30,7 +29,6 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Query;
 
-import java.util.List;
 import java.util.ArrayList;
 
 public class ClearGuestbookServlet extends HttpServlet {

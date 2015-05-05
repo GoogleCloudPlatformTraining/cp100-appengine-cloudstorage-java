@@ -17,7 +17,6 @@
 package com.mycompany.app;
 
 import java.io.IOException;
-import java.util.Properties;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -41,7 +40,6 @@ import java.io.OutputStream;
 import java.nio.channels.Channels;
 
 import java.util.Date;
-import java.util.List;
 
 public class SignGuestbookServlet extends HttpServlet {
 
